@@ -27,4 +27,38 @@ api.interceptors.response.use(
   }
 )
 
-export default
+export async function searchHotels({ city, from, to, guests, page = 0, size = 6 }) {
+  const response = await api.get('/hotels/search', {
+    params: {
+      city,
+      startDate: from,
+      endDate: to,
+      roomsCount: guests,
+      page,
+      size,
+    },
+  })
+  return response.data
+}
+
+export async function getHotel(hotelId, { from, to, guests } = {}) {
+  const response = await api.get(`/hotels/${hotelId}/info`, {
+    params: { startDate: from, endDate: to, roomsCount: guests },
+  })
+  return response.data
+}
+
+export function readError(error, fallback = 'Something went wrong. Please try again.') {
+  if (error.response?.data?.apiError?.message) {
+    return error.response.data.apiError.message
+  }
+  if (error.response?.data?.message) {
+    return error.response.data.message
+  }
+  if (error.code === 'ERR_NETWORK') {
+    return 'Could not reach the server. Is the backend running?'
+  }
+  return fallback
+}
+
+export default api
