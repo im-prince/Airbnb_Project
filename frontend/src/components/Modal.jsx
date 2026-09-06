@@ -52,7 +52,7 @@ export default function Modal({ open, onClose, title, children, footer, width = 
   return createPortal(
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(43,20,40,0.45)] p-4 backdrop-blur-[4px]"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[rgba(11,27,51,0.45)] p-4 backdrop-blur-[4px]"
     >
       <div
         ref={boxRef}

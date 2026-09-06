@@ -3,12 +3,11 @@ import { useState } from 'react'
 import { Search } from 'lucide-react'
 
 const cities = [
-  { name: 'Jaipur', tone: '#6B3A62' },
-  { name: 'Goa', tone: '#8A6650' },
-  { name: 'Manali', tone: '#57415E' },
-  { name: 'Udaipur', tone: '#7B4A56' },
+  { name: 'Jaipur', tone: '#1B3557' },
+  { name: 'Goa', tone: '#9A5240' },
+  { name: 'Manali', tone: '#2C4A63' },
+  { name: 'Udaipur', tone: '#7C4636' },
 ]
-
 function addDays(days) {
   const date = new Date()
   date.setDate(date.getDate() + days)
@@ -35,24 +34,24 @@ export default function Home() {
 
   return (
     <div className="mx-auto max-w-[1200px] px-6">
-      <section className="relative mt-6 overflow-hidden rounded-[var(--r-xl)] bg-[#3E1D39] px-8 py-20">
-        <div className="absolute -right-16 -top-12 h-72 w-72 rounded-full bg-[#4C2646]" />
-        <div className="absolute -bottom-20 right-24 h-48 w-48 rounded-full bg-[#331630]" />
+                  <section className="relative mt-6 overflow-hidden rounded-[var(--r-xl)] bg-[#0B1B33] px-8 py-14">
+        <div className="absolute -right-16 -top-12 h-72 w-72 rounded-full bg-[#132844]" />
+        <div className="absolute -bottom-20 right-24 h-48 w-48 rounded-full bg-[#F0492B] opacity-[0.18]" />
 
         <div className="relative max-w-[520px]">
-          <p className="m-0 text-xs font-semibold uppercase tracking-[0.14em] text-[#D8B071]">
+          <p className="m-0 text-xs font-semibold uppercase tracking-[0.14em] text-[#F0492B]">
             Stays across India
           </p>
           <h1 className="mt-4 text-[40px] font-extrabold leading-[1.1] tracking-tight text-white">
             Stay somewhere worth remembering
           </h1>
-          <p className="mt-4 text-[17px] leading-relaxed text-[#D9C4D2]">
+          <p className="mt-4 text-[17px] leading-relaxed text-[#B4C0D0]">
             Verified homes and hotels. Honest prices, no surprises at checkout.
           </p>
         </div>
       </section>
 
-      <div className="relative z-10 -mt-8 flex flex-wrap items-end gap-4 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 sm:mx-8">
+      <div className="relative z-10 -mt-8 flex flex-wrap items-end gap-4 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 sm:mx-14">
         <Field label="Where">
           <input
             value={city}
