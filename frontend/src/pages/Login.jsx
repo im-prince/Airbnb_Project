@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
-import { login, readError } from '../lib/api'
+import { readError } from '../lib/api'
+import { useAuth } from '../lib/useAuth'
 import Input from '../components/Input'
 import Button from '../components/Button'
 
 export default function Login() {
   const navigate = useNavigate()
+    const { signIn } = useAuth()
   const [params] = useSearchParams()
   const next = params.get('next') || '/'
 
@@ -21,7 +23,7 @@ export default function Login() {
     setError('')
     setBusy(true)
     try {
-      await login({ email, password })
+            await signIn({ email, password })
       navigate(next, { replace: true })
     } catch (err) {
       setError(readError(err, 'Could not log you in. Check your email and password.'))

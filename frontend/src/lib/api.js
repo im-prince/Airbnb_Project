@@ -29,19 +29,34 @@ api.interceptors.response.use(
 
 export async function login({ email, password }) {
   const response = await api.post('/auth/login', { email, password })
-  const data = response.data
-  const token = data.accessToken || data.token
+  const payload = response.data?.data || response.data
+  const token = payload.accessToken || payload.token
   if (token) {
     localStorage.setItem('token', token)
   }
-  return data
+  return { token, user: readUserFromToken(token) }
+}
+
+export function readUserFromToken(token) {
+  if (!token) return null
+  try {
+    const middle = token.split('.')[1]
+    const json = atob(middle.replace(/-/g, '+').replace(/_/g, '/'))
+    const claims = JSON.parse(json)
+    return {
+      id: claims.sub,
+      email: claims.email,
+      roles: claims.roles,
+    }
+  } catch {
+    return null
+  }
 }
 
 export async function signup({ name, email, password }) {
   const response = await api.post('/auth/signup', { name, email, password })
-  return response.data
+  return response.data?.data || response.data
 }
-
 export function logout() {
   localStorage.removeItem('token')
 }

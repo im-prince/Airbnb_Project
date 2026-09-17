@@ -14,10 +14,9 @@ export function AuthProvider({ children }) {
   })
 
   const signedIn = Boolean(getToken() && user)
-
   async function signIn({ email, password }) {
-    const data = await loginRequest({ email, password })
-    const person = data.user || data.data?.user || { email }
+    const result = await loginRequest({ email, password })
+    const person = result.user
     setUser(person)
     localStorage.setItem('user', JSON.stringify(person))
     return person
