@@ -2,6 +2,8 @@ import { Routes, Route } from 'react-router-dom'
 import TopNav from './components/TopNav'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import SearchResults from './pages/SearchResults'
+import Login from './pages/Login'
 
 function Placeholder({ name }) {
   return (
@@ -17,9 +19,9 @@ export default function App() {
       <TopNav />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Placeholder name="Search results" />} />
+        <Route path="/search" element={<SearchResults />} />
         <Route path="/hotels/:hotelId" element={<Placeholder name="Hotel detail" />} />
-        <Route path="/login" element={<Placeholder name="Login" />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Placeholder name="Sign up" />} />
         <Route path="/trips" element={<Placeholder name="My trips" />} />
         <Route path="/manager" element={<Placeholder name="Manager dashboard" />} />

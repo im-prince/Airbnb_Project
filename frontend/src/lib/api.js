@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080',
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -27,6 +27,29 @@ api.interceptors.response.use(
   }
 )
 
+export async function login({ email, password }) {
+  const response = await api.post('/auth/login', { email, password })
+  const data = response.data
+  const token = data.accessToken || data.token
+  if (token) {
+    localStorage.setItem('token', token)
+  }
+  return data
+}
+
+export async function signup({ name, email, password }) {
+  const response = await api.post('/auth/signup', { name, email, password })
+  return response.data
+}
+
+export function logout() {
+  localStorage.removeItem('token')
+}
+
+export function getToken() {
+  return localStorage.getItem('token')
+}
+
 export async function searchHotels({ city, from, to, guests, page = 0, size = 6 }) {
   const response = await api.get('/hotels/search', {
     params: {
@@ -41,14 +64,15 @@ export async function searchHotels({ city, from, to, guests, page = 0, size = 6 
   return response.data
 }
 
-export async function getHotel(hotelId, { from, to, guests } = {}) {
-  const response = await api.get(`/hotels/${hotelId}/info`, {
-    params: { startDate: from, endDate: to, roomsCount: guests },
-  })
+export async function getHotel(hotelId) {
+  const response = await api.get(`/hotels/${hotelId}/info`)
   return response.data
 }
 
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
+  if (error.response?.data?.error?.message) {
+    return error.response.data.error.message
+  }
   if (error.response?.data?.apiError?.message) {
     return error.response.data.apiError.message
   }
