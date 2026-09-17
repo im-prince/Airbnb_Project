@@ -3,14 +3,18 @@ package com.prince.airbnb.entity;
 
 import com.prince.airbnb.entity.enums.BookingStatus;
 import jakarta.persistence.*;
-import lombok.*;
-import com.prince.airbnb.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -62,9 +66,15 @@ public class Booking {
             joinColumns = @JoinColumn(name = "booking_id"),
             inverseJoinColumns = @JoinColumn(name = "guest_id")
     )
-    private Set<Guest> guests;
+    @Builder.Default
+    private Set<Guest> guests = new HashSet<>();
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
+    @Column(unique = true)
+    private String paymentSessionId;
+
+    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
+    private Payment payment;
 }

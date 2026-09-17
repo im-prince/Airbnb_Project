@@ -1,6 +1,5 @@
 package com.prince.airbnb.repository;
 
-
 import com.prince.airbnb.entity.Hotel;
 import com.prince.airbnb.entity.Inventory;
 import com.prince.airbnb.entity.Room;
@@ -19,6 +18,10 @@ import java.util.List;
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
     void deleteByRoom(Room room);
+
+    List<Inventory> findByHotelAndDateBetween(Hotel hotel, LocalDate startDate, LocalDate endDate);
+
+    List<Inventory> findByRoomAndDateBetween(Room room, LocalDate startDate, LocalDate endDate);
 
     @Query("""
             SELECT DISTINCT i.hotel
@@ -54,6 +57,5 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
             @Param("endDate") LocalDate endDate,
             @Param("roomsCount") Integer roomsCount
     );
-
 
 }
