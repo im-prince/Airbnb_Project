@@ -6,6 +6,7 @@ import Home from './pages/Home'
 import SearchResults from './pages/SearchResults'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import HotelDetail from './pages/HotelDetail'
 
 function Placeholder({ name }) {
   return (
@@ -22,9 +23,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />
-        <Route path="/hotels/:hotelId" element={<Placeholder name="Hotel detail" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/hotels/:hotelId" element={<HotelDetail />} />
 
         <Route
           path="/trips"

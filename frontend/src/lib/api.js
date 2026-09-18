@@ -76,12 +76,12 @@ export async function searchHotels({ city, from, to, guests, page = 0, size = 6 
       size,
     },
   })
-  return response.data
+  return response.data?.data || response.data
 }
 
 export async function getHotel(hotelId) {
   const response = await api.get(`/hotels/${hotelId}/info`)
-  return response.data
+  return response.data?.data || response.data
 }
 
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
