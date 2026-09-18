@@ -57,6 +57,7 @@ export async function signup({ name, email, password }) {
   const response = await api.post('/auth/signup', { name, email, password })
   return response.data?.data || response.data
 }
+
 export function logout() {
   localStorage.removeItem('token')
 }
@@ -81,6 +82,44 @@ export async function searchHotels({ city, from, to, guests, page = 0, size = 6 
 
 export async function getHotel(hotelId) {
   const response = await api.get(`/hotels/${hotelId}/info`)
+  return response.data?.data || response.data
+}
+
+export async function getAvailability(hotelId, { from, to }) {
+  const response = await api.get(`/hotels/${hotelId}/availability`, {
+    params: { startDate: from, endDate: to },
+  })
+  return response.data?.data || response.data
+}
+
+export async function initBooking({ hotelId, roomId, checkInDate, checkOutDate, roomsCount }) {
+  const response = await api.post('/bookings/init', {
+    hotelId,
+    roomId,
+    checkInDate,
+    checkOutDate,
+    roomsCount,
+  })
+  return response.data?.data || response.data
+}
+
+export async function addGuests(bookingId, guests) {
+  const response = await api.post(`/bookings/${bookingId}/addGuests`, guests)
+  return response.data?.data || response.data
+}
+
+export async function startPayment(bookingId) {
+  const response = await api.post(`/bookings/${bookingId}/payments`)
+  return response.data?.data || response.data
+}
+
+export async function getBooking(bookingId) {
+  const response = await api.get(`/bookings/${bookingId}`)
+  return response.data?.data || response.data
+}
+
+export async function getMyBookings() {
+  const response = await api.get('/bookings/mine')
   return response.data?.data || response.data
 }
 
