@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Star } from 'lucide-react'
+import { Star, ImageOff } from 'lucide-react'
 
 const rupees = new Intl.NumberFormat('en-IN', {
   style: 'currency',
@@ -8,6 +9,8 @@ const rupees = new Intl.NumberFormat('en-IN', {
 })
 
 export default function HotelCard({ hotel, price, search = '' }) {
+  const [photoBroken, setPhotoBroken] = useState(false)
+
   const photo = hotel.photos?.[0]
   const amenities = hotel.amenities?.slice(0, 3).join(', ')
   const extra = hotel.amenities?.length > 3 ? ` +${hotel.amenities.length - 3}` : ''
@@ -17,18 +20,17 @@ export default function HotelCard({ hotel, price, search = '' }) {
       to={`/hotels/${hotel.id}${search}`}
       className="group block overflow-hidden rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] no-underline transition-transform duration-200 hover:-translate-y-0.5"
     >
-      <div className="h-[180px] overflow-hidden bg-[var(--surface-2)]">
-        {photo ? (
+      <div className="flex h-[180px] items-center justify-center overflow-hidden bg-[#1B3557]">
+        {photo && !photoBroken ? (
           <img
             src={photo}
             alt={`${hotel.name} in ${hotel.city}`}
             loading="lazy"
+            onError={() => setPhotoBroken(true)}
             className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-sm text-[var(--muted)]">
-            No photo
-          </div>
+          <ImageOff size={24} strokeWidth={1.5} className="text-[#5C7796]" />
         )}
       </div>
 

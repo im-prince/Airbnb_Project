@@ -7,6 +7,7 @@ import SearchResults from './pages/SearchResults'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import HotelDetail from './pages/HotelDetail'
+import NotFound from './pages/NotFound'
 
 function Placeholder({ name }) {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/hotels/:hotelId" element={<HotelDetail />} />
+        <Route path="*" element={<NotFound />} />
 
         <Route
           path="/trips"
