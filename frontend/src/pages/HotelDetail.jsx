@@ -5,6 +5,7 @@ import { getHotel, readError } from '../lib/api'
 import { useAuth } from '../lib/useAuth'
 import Button from '../components/Button'
 import { Skeleton } from '../components/Skeleton'
+import { useToast } from '../lib/useToast'
 
 const rupees = new Intl.NumberFormat('en-IN', {
   style: 'currency',
@@ -25,6 +26,7 @@ export default function HotelDetail() {
   const [params] = useSearchParams()
   const navigate = useNavigate()
   const { signedIn } = useAuth()
+  const { toast } = useToast()
 
   const [info, setInfo] = useState(null)
   const [pickedRoom, setPickedRoom] = useState(null)
@@ -70,7 +72,7 @@ export default function HotelDetail() {
       navigate(`/login?next=${encodeURIComponent(here)}`)
       return
     }
-    alert('Booking flow comes next')
+    toast.success('Room held. Booking flow comes next.')
   }
 
   if (loading) {

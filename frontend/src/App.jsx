@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import HotelDetail from './pages/HotelDetail'
 import NotFound from './pages/NotFound'
+import Toaster from './components/Toaster'
 
 function Placeholder({ name }) {
   return (
@@ -59,6 +60,7 @@ export default function App() {
         <Route path="*" element={<Placeholder name="Page not found" />} />
       </Routes>
       <Footer />
+      <Toaster />
     </>
   )
 }
