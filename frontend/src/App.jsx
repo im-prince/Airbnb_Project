@@ -10,6 +10,7 @@ import HotelDetail from './pages/HotelDetail'
 import NotFound from './pages/NotFound'
 import Toaster from './components/Toaster'
 import Forbidden from './pages/Forbidden'
+import Checkout from './pages/Checkout'
 
 function Placeholder({ name }) {
   return (
@@ -28,6 +29,14 @@ export default function App() {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/checkout/:bookingId"
+          element={
+            <RequireAuth>
+              <Checkout />
+            </RequireAuth>
+          }
+        />
         <Route path="/hotels/:hotelId" element={<HotelDetail />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/no-access" element={<Forbidden />} />

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 export function useCountdown(seconds) {
-  const [left, setLeft] = useState(seconds ?? 0)
+  const [left, setLeft] = useState(seconds ?? null)
   const onZero = useRef(null)
 
   useEffect(() => {
@@ -27,8 +27,8 @@ export function useCountdown(seconds) {
 
   return {
     left,
-    expired: left <= 0,
-    label: formatClock(left),
+    expired: left !== null && left <= 0,
+    label: left === null ? '--:--' : formatClock(left),
     onExpire: (fn) => {
       onZero.current = fn
     },
