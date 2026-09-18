@@ -233,12 +233,27 @@ function RoomRow({ room, picked, onPick }) {
       }`}
     >
       <div className="h-16 w-20 shrink-0 rounded-[var(--r-md)] bg-[#1B3557]" />
+
       <div className="min-w-0 flex-1">
         <div className="font-semibold">{room.type}</div>
         <div className="mt-0.5 text-sm text-[var(--muted)]">
           Sleeps {room.capacity} · {room.totalCount} rooms
         </div>
+
+        {room.amenities?.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1.5">
+            {room.amenities.map((item) => (
+              <span
+                key={item}
+                className="rounded-[var(--r-sm)] bg-[var(--surface-2)] px-2 py-0.5 text-xs text-[var(--ink-2)]"
+              >
+                {item}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
+
       <div className="shrink-0 text-right">
         <div className="nums font-bold">{rupees.format(room.basePrice)}</div>
         <div className="text-xs text-[var(--muted)]">per night</div>
