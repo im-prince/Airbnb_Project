@@ -9,6 +9,7 @@ import Signup from './pages/Signup'
 import HotelDetail from './pages/HotelDetail'
 import NotFound from './pages/NotFound'
 import Toaster from './components/Toaster'
+import Forbidden from './pages/Forbidden'
 
 function Placeholder({ name }) {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/hotels/:hotelId" element={<HotelDetail />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/no-access" element={<Forbidden />} />
 
         <Route
           path="/trips"
