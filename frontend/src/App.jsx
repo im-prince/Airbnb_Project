@@ -5,6 +5,7 @@ import RequireAuth from './components/RequireAuth'
 import Home from './pages/Home'
 import SearchResults from './pages/SearchResults'
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 
 function Placeholder({ name }) {
   return (
@@ -23,7 +24,7 @@ export default function App() {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/hotels/:hotelId" element={<Placeholder name="Hotel detail" />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Placeholder name="Sign up" />} />
+        <Route path="/signup" element={<Signup />} />
 
         <Route
           path="/trips"
