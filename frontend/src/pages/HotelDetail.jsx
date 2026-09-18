@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
 import { Wifi, Waves, Coffee, Car, Star, ImageOff } from 'lucide-react'
-import { getHotel, readError } from '../lib/api'
+import { getHotel, initBooking, readError } from '../lib/api'
 import { useAuth } from '../lib/useAuth'
+import { useToast } from '../lib/useToast'
 import Button from '../components/Button'
 import { Skeleton } from '../components/Skeleton'
-import { useToast } from '../lib/useToast'
 
 const rupees = new Intl.NumberFormat('en-IN', {
   style: 'currency',
@@ -31,6 +31,7 @@ export default function HotelDetail() {
   const [info, setInfo] = useState(null)
   const [pickedRoom, setPickedRoom] = useState(null)
   const [photoBroken, setPhotoBroken] = useState(false)
+  const [reserving, setReserving] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -66,13 +67,29 @@ export default function HotelDetail() {
   const rooms = info?.rooms || []
   const nights = countNights(from, to)
 
-  function reserve() {
+  async function reserve() {
     if (!signedIn) {
       const here = `/hotels/${hotelId}?${params}`
       navigate(`/login?next=${encodeURIComponent(here)}`)
       return
     }
-    toast.success('Room held. Booking flow comes next.')
+
+    if (reserving) return
+
+    setReserving(true)
+    try {
+      const booking = await initBooking({
+        hotelId: Number(hotelId),
+        roomId: pickedRoom.id,
+        checkInDate: from,
+        checkOutDate: to,
+        roomsCount: Number(guests),
+      })
+      navigate(`/checkout/${booking.id}`)
+    } catch (err) {
+      toast.error(readError(err, 'Could not hold this room. Please try again.'))
+      setReserving(false)
+    }
   }
 
   if (loading) {
@@ -205,9 +222,10 @@ export default function HotelDetail() {
               size="lg"
               className="mt-4 w-full"
               disabled={!pickedRoom || nights < 1}
+              loading={reserving}
               onClick={reserve}
             >
-              Reserve
+              {reserving ? 'Holding your room' : 'Reserve'}
             </Button>
 
             <p className="mt-3 text-center text-xs text-[var(--muted)]">
