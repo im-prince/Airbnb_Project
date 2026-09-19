@@ -12,6 +12,7 @@ import Toaster from './components/Toaster'
 import Forbidden from './pages/Forbidden'
 import Checkout from './pages/Checkout'
 import Payment from './pages/Payment'
+import BookingDone from './pages/BookingDone'
 
 function Placeholder({ name }) {
   return (
@@ -28,8 +29,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/hotels/:hotelId" element={<HotelDetail />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/no-access" element={<Forbidden />} />
+
         <Route
           path="/checkout/:bookingId"
           element={
@@ -38,6 +42,7 @@ export default function App() {
             </RequireAuth>
           }
         />
+
         <Route
           path="/checkout/:bookingId/pay"
           element={
@@ -46,9 +51,24 @@ export default function App() {
             </RequireAuth>
           }
         />
-        <Route path="/hotels/:hotelId" element={<HotelDetail />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="/no-access" element={<Forbidden />} />
+
+        <Route
+          path="/bookings/:bookingId/done"
+          element={
+            <RequireAuth>
+              <BookingDone />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/trips/:bookingId"
+          element={
+            <RequireAuth>
+              <Placeholder name="Trip detail" />
+            </RequireAuth>
+          }
+        />
 
         <Route
           path="/trips"
@@ -77,7 +97,7 @@ export default function App() {
           }
         />
 
-        <Route path="*" element={<Placeholder name="Page not found" />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
       <Toaster />
