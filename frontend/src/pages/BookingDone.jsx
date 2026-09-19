@@ -49,7 +49,7 @@ export default function BookingDone() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-[620px] px-6 py-16">
+      <div className="mx-auto max-w-[620px] px-4 py-10 sm:px-6 sm:py-16">
         <Skeleton className="mx-auto h-16 w-16 rounded-full" />
         <Skeleton className="mx-auto mt-6 h-8 w-2/3" />
         <Skeleton className="mt-8 h-64 w-full" />
@@ -59,7 +59,7 @@ export default function BookingDone() {
 
   if (error || !booking) {
     return (
-      <div className="mx-auto max-w-[620px] px-6 py-16 text-center">
+      <div className="mx-auto max-w-[620px] px-4 py-10 text-center sm:px-6 sm:py-16">
         <p className="m-0 text-[15px] text-[var(--ink-2)]">
           {error || 'Could not find this booking.'}
         </p>
@@ -73,7 +73,7 @@ export default function BookingDone() {
   }
 
   return (
-    <div className="mx-auto max-w-[620px] px-6 py-16 text-center">
+    <div className="mx-auto max-w-[620px] px-4 py-10 text-center sm:px-6 sm:py-16">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--brand-soft)]">
         <CheckCircle2 size={30} className="text-[var(--brand)]" />
       </div>
@@ -83,7 +83,7 @@ export default function BookingDone() {
         A confirmation has been sent to your email.
       </p>
 
-      <div className="mt-8 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-6 text-left">
+      <div className="mt-8 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 text-left sm:p-6">
         <Row label="Check in" value={booking.checkInDate} />
         <Row label="Check out" value={booking.checkOutDate} />
         <Row label="Rooms" value={String(booking.roomsCount)} />

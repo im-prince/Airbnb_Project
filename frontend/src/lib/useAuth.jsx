@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useCallback, useMemo } from 'react'
 import { login as loginRequest, signup as signupRequest, logout as clearToken, getToken } from './api'
 
 const AuthContext = createContext(null)
@@ -13,31 +13,36 @@ export function AuthProvider({ children }) {
     }
   })
 
-  const signedIn = Boolean(getToken() && user)
-  async function signIn({ email, password }) {
-    const result = await loginRequest({ email, password })
-    const person = result.user
+  const signIn = useCallback(async ({ email, password }) => {
+    const data = await loginRequest({ email, password })
+    const person = data.user || { email }
     setUser(person)
     localStorage.setItem('user', JSON.stringify(person))
     return person
-  }
+  }, [])
 
-  async function register({ name, email, password }) {
-    await signupRequest({ name, email, password })
-    return signIn({ email, password })
-  }
+  const register = useCallback(
+    async ({ name, email, password }) => {
+      await signupRequest({ name, email, password })
+      return signIn({ email, password })
+    },
+    [signIn]
+  )
 
-  function signOut() {
+  const signOut = useCallback(() => {
     clearToken()
     localStorage.removeItem('user')
     setUser(null)
-  }
+  }, [])
 
-  return (
-    <AuthContext.Provider value={{ user, signedIn, signIn, register, signOut }}>
-      {children}
-    </AuthContext.Provider>
+  const signedIn = Boolean(getToken() && user)
+
+  const value = useMemo(
+    () => ({ user, signedIn, signIn, register, signOut }),
+    [user, signedIn, signIn, register, signOut]
   )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

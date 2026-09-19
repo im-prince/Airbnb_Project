@@ -60,7 +60,7 @@ export default function TripDetail() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-[760px] px-6 py-8">
+      <div className="mx-auto max-w-[760px] px-4 py-6 sm:px-6 sm:py-8">
         <Skeleton className="h-8 w-1/3" />
         <Skeleton className="mt-6 h-48 w-full" />
       </div>
@@ -69,7 +69,7 @@ export default function TripDetail() {
 
   if (error || !booking) {
     return (
-      <div className="mx-auto max-w-[760px] px-6 py-16 text-center">
+      <div className="mx-auto max-w-[760px] px-4 py-16 text-center sm:px-6">
         <p className="m-0 text-[15px] text-[var(--ink-2)]">
           {error || 'Could not find this trip.'}
         </p>
@@ -87,7 +87,7 @@ export default function TripDetail() {
   const canCancel = booking.bookingStatus === 'CONFIRMED'
 
   return (
-    <div className="mx-auto max-w-[760px] px-6 py-8">
+    <div className="mx-auto max-w-[760px] px-4 py-6 sm:px-6 sm:py-8">
       <Link
         to="/trips"
         className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]"
@@ -96,7 +96,7 @@ export default function TripDetail() {
       </Link>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="m-0 text-2xl font-bold tracking-tight">
+        <h1 className="m-0 text-xl font-bold tracking-tight sm:text-2xl">
           {booking.checkInDate} – {booking.checkOutDate}
         </h1>
         <span className={`rounded-full px-3 py-1 text-xs font-semibold ${badge}`}>
@@ -108,7 +108,7 @@ export default function TripDetail() {
         {statusNote[booking.bookingStatus] || ''}
       </p>
 
-      <div className="mt-6 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-6">
+      <div className="mt-6 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 sm:p-6">
         <h2 className="m-0 text-base font-bold">Stay</h2>
         <div className="mt-3 flex flex-col gap-2 text-sm">
           <Row label="Check in" value={booking.checkInDate} />
@@ -121,9 +121,11 @@ export default function TripDetail() {
         {booking.guests?.length > 0 ? (
           <div className="mt-3 flex flex-col gap-2 text-sm">
             {[...booking.guests].map((guest) => (
-              <div key={guest.id} className="flex justify-between">
-                <span className="text-[var(--ink)]">{guest.name}</span>
-                <span className="text-[var(--muted)]">
+              <div key={guest.id} className="flex items-start justify-between gap-3">
+                <span className="min-w-0 truncate text-[var(--ink)]" title={guest.name}>
+                  {guest.name}
+                </span>
+                <span className="shrink-0 text-[var(--muted)]">
                   {guest.age} · {formatStatus(guest.gender)}
                 </span>
               </div>
@@ -158,10 +160,11 @@ export default function TripDetail() {
 
 function Row({ label, value, mono = false, bold = false }) {
   return (
-    <div className="flex justify-between gap-3">
-      <span className="text-[var(--muted)]">{label}</span>
+    <div className="flex items-start justify-between gap-3">
+      <span className="shrink-0 text-[var(--muted)]">{label}</span>
       <span
-        className={`${mono ? 'mono' : ''} ${bold ? 'font-bold text-[var(--ink)]' : 'text-[var(--ink)]'}`}
+        className={`min-w-0 truncate text-right ${mono ? 'mono' : ''} ${bold ? 'font-bold text-[var(--ink)]' : 'text-[var(--ink)]'}`}
+        title={typeof value === 'string' ? value : undefined}
       >
         {value}
       </span>
