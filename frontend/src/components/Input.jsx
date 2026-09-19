@@ -28,7 +28,7 @@ export default function Input({
         type={type}
         aria-invalid={error ? true : undefined}
         aria-describedby={message ? messageId : undefined}
-        className={`h-12 rounded-[var(--r-md)] border px-3.5 text-[15px] text-[var(--ink)] outline-none transition-colors duration-150 placeholder:text-[var(--muted)] focus:border-transparent focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--brand)] disabled:cursor-not-allowed disabled:text-[var(--muted)] ${
+        className={`h-12 rounded-[var(--r-md)] border px-3.5 text-base sm:text-[15px] text-[var(--ink)] outline-none transition-colors duration-150 placeholder:text-[var(--muted)] focus:border-transparent focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--brand)] disabled:cursor-not-allowed disabled:text-[var(--muted)] ${
           error
             ? 'border-[var(--danger)] bg-[var(--danger-soft)]'
             : 'border-[var(--line)] bg-[var(--surface-2)]'
