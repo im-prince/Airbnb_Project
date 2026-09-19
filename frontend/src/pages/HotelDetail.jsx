@@ -75,6 +75,7 @@ export default function HotelDetail() {
     }
 
     if (reserving) return
+    if (!pickedRoom) return
 
     setReserving(true)
     try {
@@ -94,8 +95,8 @@ export default function HotelDetail() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-[1200px] px-6 py-8">
-        <Skeleton className="h-[320px] w-full" />
+      <div className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 sm:py-8">
+        <Skeleton className="h-[220px] w-full sm:h-[320px]" />
         <Skeleton className="mt-6 h-8 w-1/3" />
         <Skeleton className="mt-3 h-4 w-1/4" />
         <Skeleton className="mt-8 h-24 w-full" />
@@ -106,7 +107,7 @@ export default function HotelDetail() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-[1200px] px-6 py-16 text-center">
+      <div className="mx-auto max-w-[1200px] px-4 py-16 text-center sm:px-6">
         <p className="m-0 text-[15px] text-[var(--ink-2)]">{error}</p>
         <div className="mt-4">
           <Button variant="secondary" onClick={() => window.location.reload()}>
@@ -117,9 +118,11 @@ export default function HotelDetail() {
     )
   }
 
+  const canReserve = Boolean(pickedRoom) && nights > 0
+
   return (
-    <div className="mx-auto max-w-[1200px] px-6 py-8">
-      <div className="flex h-[320px] items-center justify-center overflow-hidden rounded-[var(--r-xl)] bg-[#1B3557]">
+    <div className="mx-auto max-w-[1200px] px-4 pb-28 pt-6 sm:px-6 sm:pb-8 sm:pt-8">
+      <div className="flex h-[220px] items-center justify-center overflow-hidden rounded-[var(--r-xl)] bg-[#1B3557] sm:h-[320px]">
         {hotel?.photos?.[0] && !photoBroken ? (
           <img
             src={hotel.photos[0]}
@@ -135,9 +138,11 @@ export default function HotelDetail() {
         )}
       </div>
 
-      <div className="mt-8 flex flex-col gap-10 lg:flex-row">
+      <div className="mt-6 flex flex-col gap-8 sm:mt-8 sm:gap-10 lg:flex-row">
         <div className="flex-1">
-          <h1 className="m-0 text-3xl font-bold tracking-tight">{hotel?.name}</h1>
+          <h1 className="m-0 text-2xl font-bold tracking-tight sm:text-3xl">
+            {hotel?.name}
+          </h1>
           <p className="mt-2 text-sm text-[var(--ink-2)]">
             <Star size={14} className="mr-1 inline text-[var(--accent)]" fill="currentColor" />
             <span className="font-semibold text-[var(--ink)]">{hotel?.rating || '4.5'}</span>
@@ -146,7 +151,7 @@ export default function HotelDetail() {
           </p>
 
           {hotel?.amenities?.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-6 border-b border-[var(--line)] pb-6">
+            <div className="mt-5 flex flex-wrap gap-5 border-b border-[var(--line)] pb-5 sm:mt-6 sm:gap-6 sm:pb-6">
               {hotel.amenities.slice(0, 6).map((item) => {
                 const Icon = amenityIcons[String(item).toLowerCase()] || Star
                 return (
@@ -159,7 +164,7 @@ export default function HotelDetail() {
             </div>
           )}
 
-          <h2 className="mt-8 text-xl font-bold">Choose your room</h2>
+          <h2 className="mt-6 text-lg font-bold sm:mt-8 sm:text-xl">Choose your room</h2>
 
           {rooms.length === 0 && (
             <p className="mt-3 text-[15px] text-[var(--muted)]">
@@ -179,7 +184,8 @@ export default function HotelDetail() {
           </div>
         </div>
 
-        <aside className="w-full lg:w-[320px]">
+        {/* Desktop price box — hidden on mobile, replaced by the fixed bar below */}
+        <aside className="hidden w-full lg:block lg:w-[320px]">
           <div className="sticky top-[88px] rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-5">
             <div className="flex items-baseline gap-1.5">
               <span className="nums text-2xl font-bold">
@@ -221,7 +227,7 @@ export default function HotelDetail() {
             <Button
               size="lg"
               className="mt-4 w-full"
-              disabled={!pickedRoom || nights < 1}
+              disabled={!canReserve}
               loading={reserving}
               onClick={reserve}
             >
@@ -238,6 +244,40 @@ export default function HotelDetail() {
           </div>
         </aside>
       </div>
+
+      {/* Mobile fixed bottom bar — hidden on desktop */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--line)] bg-[var(--surface)] px-4 py-3 shadow-[var(--shadow-3)] lg:hidden">
+        <div className="mx-auto flex max-w-[1200px] items-center gap-3">
+          <div className="min-w-0 flex-1">
+            {pickedRoom ? (
+              <>
+                <div className="nums text-lg font-bold leading-tight">
+                  {rupees.format(pickedRoom.basePrice)}
+                  <span className="text-xs font-normal text-[var(--muted)]"> / night</span>
+                </div>
+                <div className="truncate text-xs text-[var(--muted)]">
+                  {nights > 0
+                    ? `${nights} ${nights === 1 ? 'night' : 'nights'} · ${rupees.format(
+                        pickedRoom.basePrice * nights
+                      )} total`
+                    : 'Add dates to continue'}
+                </div>
+              </>
+            ) : (
+              <div className="text-sm text-[var(--muted)]">Pick a room to continue</div>
+            )}
+          </div>
+          <Button
+            size="lg"
+            className="shrink-0"
+            disabled={!canReserve}
+            loading={reserving}
+            onClick={reserve}
+          >
+            {reserving ? 'Holding' : 'Reserve'}
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }
@@ -249,13 +289,13 @@ function RoomRow({ room, picked, onPick }) {
   return (
     <button
       onClick={onPick}
-      className={`flex w-full items-center gap-4 rounded-[var(--r-lg)] border p-4 text-left transition-colors duration-150 ${
+      className={`flex w-full items-center gap-3 rounded-[var(--r-lg)] border p-3 text-left transition-colors duration-150 sm:gap-4 sm:p-4 ${
         picked
           ? 'border-[var(--brand)] bg-[var(--brand-soft)]'
           : 'border-[var(--line)] bg-[var(--surface)] hover:bg-[var(--surface-2)]'
       }`}
     >
-      <div className="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[var(--r-md)] bg-[#1B3557]">
+      <div className="flex h-14 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[var(--r-md)] bg-[#1B3557] sm:h-16 sm:w-20">
         {photo && !photoBroken ? (
           <img
             src={photo}
@@ -264,13 +304,13 @@ function RoomRow({ room, picked, onPick }) {
             className="h-full w-full object-cover"
           />
         ) : (
-          <ImageOff size={18} strokeWidth={1.5} className="text-[#5C7796]" />
+          <ImageOff size={16} strokeWidth={1.5} className="text-[#5C7796]" />
         )}
       </div>
 
       <div className="min-w-0 flex-1">
-        <div className="font-semibold">{room.type}</div>
-        <div className="mt-0.5 text-sm text-[var(--muted)]">
+        <div className="truncate font-semibold">{room.type}</div>
+        <div className="mt-0.5 truncate text-sm text-[var(--muted)]">
           Sleeps {room.capacity} · {room.totalCount} rooms
         </div>
 
