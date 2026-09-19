@@ -11,6 +11,7 @@ import NotFound from './pages/NotFound'
 import Toaster from './components/Toaster'
 import Forbidden from './pages/Forbidden'
 import Checkout from './pages/Checkout'
+import Payment from './pages/Payment'
 
 function Placeholder({ name }) {
   return (
@@ -34,6 +35,14 @@ export default function App() {
           element={
             <RequireAuth>
               <Checkout />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/checkout/:bookingId/pay"
+          element={
+            <RequireAuth>
+              <Payment />
             </RequireAuth>
           }
         />
