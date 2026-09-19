@@ -54,19 +54,19 @@ export default function SearchResults() {
   }
 
   return (
-    <div className="mx-auto max-w-[1200px] px-6 py-8">
-      <h1 className="m-0 text-2xl font-bold" aria-live="polite">
+    <div className="mx-auto max-w-[1200px] px-4 py-6 sm:px-6 sm:py-8">
+      <h1 className="m-0 text-xl font-bold sm:text-2xl" aria-live="polite">
         {loading ? 'Searching…' : `${total} ${total === 1 ? 'stay' : 'stays'} in ${city}`}
       </h1>
       <p className="mt-1 text-sm text-[var(--muted)]">
         {from} to {to} · {guests} {guests === '1' ? 'guest' : 'guests'}
       </p>
 
-      <div className="mt-6">
+      <div className="mt-5 sm:mt-6">
         {loading && <HotelGridSkeleton />}
 
         {!loading && error && (
-          <div className="rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-8 text-center">
+          <div className="rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-6 text-center sm:p-8">
             <p className="m-0 text-[15px] text-[var(--ink-2)]">{error}</p>
             <div className="mt-4">
               <Button variant="secondary" onClick={() => goToPage(page)}>
@@ -85,7 +85,7 @@ export default function SearchResults() {
         )}
 
         {!loading && !error && results.length > 0 && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
             {results.map((item) => (
               <HotelCard
                 key={item.hotel?.id ?? item.id}
@@ -99,13 +99,13 @@ export default function SearchResults() {
       </div>
 
       {!loading && !error && pages > 1 && (
-        <div className="mt-10 flex justify-center gap-2">
+        <div className="mt-8 flex flex-wrap justify-center gap-2 sm:mt-10">
           {Array.from({ length: pages }, (_, index) => (
             <button
               key={index}
               onClick={() => goToPage(index)}
               aria-current={index === page ? 'page' : undefined}
-              className={`h-10 w-10 rounded-[var(--r-md)] text-sm font-semibold transition-colors duration-150 ${
+              className={`flex h-11 w-11 items-center justify-center rounded-[var(--r-md)] text-sm font-semibold transition-colors duration-150 sm:h-10 sm:w-10 ${
                 index === page
                   ? 'bg-[var(--brand)] text-[var(--on-brand)]'
                   : 'border border-[var(--line)] text-[var(--ink-2)] hover:bg-[var(--surface-2)]'
