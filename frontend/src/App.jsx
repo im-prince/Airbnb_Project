@@ -14,6 +14,7 @@ import Checkout from './pages/Checkout'
 import Payment from './pages/Payment'
 import BookingDone from './pages/BookingDone'
 import MyTrips from './pages/MyTrips'
+import TripDetail from './pages/TripDetail'
 
 function Placeholder({ name }) {
   return (
@@ -66,7 +67,7 @@ export default function App() {
           path="/trips/:bookingId"
           element={
             <RequireAuth>
-              <Placeholder name="Trip detail" />
+              <TripDetail />
             </RequireAuth>
           }
         />
