@@ -52,7 +52,7 @@ export default function MyTrips() {
   )
 
   return (
-    <div className="mx-auto max-w-[880px] px-6 py-8">
+    <div className="mx-auto max-w-[880px] px-4 py-6 sm:px-6 sm:py-8">
       <h1 className="m-0 text-2xl font-bold tracking-tight">My trips</h1>
       <p className="mt-1 text-sm text-[var(--muted)]">
         {loading ? 'Loading…' : `${sorted.length} ${sorted.length === 1 ? 'trip' : 'trips'}`}
@@ -93,10 +93,10 @@ function TripRow({ booking }) {
   return (
     <Link
       to={`/trips/${booking.id}`}
-      className="flex items-center gap-4 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 no-underline transition-colors duration-150 hover:bg-[var(--surface-2)]"
+      className="flex flex-col gap-3 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 no-underline transition-colors duration-150 hover:bg-[var(--surface-2)] sm:flex-row sm:items-center sm:gap-4"
     >
       <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="font-semibold text-[var(--ink)]">
             {booking.checkInDate} – {booking.checkOutDate}
           </span>
@@ -113,7 +113,7 @@ function TripRow({ booking }) {
         </p>
       </div>
 
-      <div className="nums shrink-0 text-right font-bold">
+      <div className="nums shrink-0 text-left font-bold sm:text-right">
         {rupees.format(booking.amount)}
       </div>
     </Link>
