@@ -59,13 +59,8 @@ export default function Checkout() {
     }
   }, [bookingId])
 
-    useEffect(() => {
-    if (!booking || booking.secondsUntilExpiry == null) return
-    if (booking.secondsUntilExpiry <= 0) {
-      setShowExpired(true)
-      return
-    }
-    if (timer.expired && booking.bookingStatus === 'RESERVED') {
+  useEffect(() => {
+    if (timer.expired && booking && booking.bookingStatus === 'RESERVED') {
       setShowExpired(true)
     }
   }, [timer.expired, booking])
@@ -117,7 +112,7 @@ export default function Checkout() {
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-[1000px] px-6 py-8">
+      <div className="mx-auto max-w-[1000px] px-4 py-6 sm:px-6 sm:py-8">
         <Skeleton className="h-12 w-full" />
         <Skeleton className="mt-6 h-64 w-full" />
       </div>
@@ -126,7 +121,7 @@ export default function Checkout() {
 
   if (error) {
     return (
-      <div className="mx-auto max-w-[1000px] px-6 py-16 text-center">
+      <div className="mx-auto max-w-[1000px] px-4 py-16 text-center sm:px-6">
         <p className="m-0 text-[15px] text-[var(--ink-2)]">{error}</p>
         <div className="mt-4">
           <Button variant="secondary" onClick={() => navigate('/')}>
@@ -142,9 +137,9 @@ export default function Checkout() {
   const lowTime = timer.left > 0 && timer.left < 120
 
   return (
-    <div className="mx-auto max-w-[1000px] px-6 py-8">
+    <div className="mx-auto max-w-[1000px] px-4 py-6 sm:px-6 sm:py-8">
       <div
-        className={`flex items-center gap-2 rounded-[var(--r-md)] px-4 py-3 text-sm ${
+        className={`flex items-center gap-2 rounded-[var(--r-md)] px-3 py-2.5 text-sm sm:px-4 sm:py-3 ${
           lowTime
             ? 'bg-[var(--danger-soft)] text-[var(--danger)]'
             : 'bg-[var(--accent-soft)] text-[var(--warning)]'
@@ -160,18 +155,20 @@ export default function Checkout() {
         )}
       </div>
 
-      <div className="mt-8 flex flex-col gap-10 lg:flex-row">
+      <div className="mt-6 flex flex-col gap-8 sm:mt-8 sm:gap-10 lg:flex-row">
         <form onSubmit={submit} className="flex-1">
-          <h1 className="m-0 text-2xl font-bold tracking-tight">Who is staying?</h1>
+          <h1 className="m-0 text-xl font-bold tracking-tight sm:text-2xl">
+            Who is staying?
+          </h1>
           <p className="mt-2 text-[15px] text-[var(--muted)]">
             Add the name and age of everyone on this booking.
           </p>
 
-          <div className="mt-6 flex flex-col gap-5">
+          <div className="mt-5 flex flex-col gap-4 sm:mt-6 sm:gap-5">
             {guests.map((guest, index) => (
               <div
                 key={index}
-                className="rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4"
+                className="rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-3 sm:p-4"
               >
                 <div className="mb-3 flex items-center justify-between">
                   <span className="text-xs font-semibold uppercase tracking-wider text-[var(--muted)]">
@@ -182,54 +179,53 @@ export default function Checkout() {
                       type="button"
                       onClick={() => removeRow(index)}
                       aria-label={`Remove guest ${index + 1}`}
-                      className="rounded-[var(--r-sm)] p-1 text-[var(--muted)] transition-colors duration-150 hover:bg-[var(--surface-2)] hover:text-[var(--danger)]"
+                      className="flex h-8 w-8 items-center justify-center rounded-[var(--r-sm)] text-[var(--muted)] transition-colors duration-150 hover:bg-[var(--surface-2)] hover:text-[var(--danger)]"
                     >
                       <X size={16} />
                     </button>
                   )}
                 </div>
 
-                <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="flex flex-col gap-3">
                   <Input
                     label="Full name"
                     value={guest.name}
                     onChange={(event) => updateGuest(index, 'name', event.target.value)}
                     placeholder="Prince Kumar"
-                    className="flex-1"
                     disabled={guestsSaved || !running}
                   />
 
-                  <div className="sm:w-[110px]">
-                    <div className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--ink-2)]">
-                      Age
+                  <div className="flex gap-3">
+                    <div className="flex-1">
+                      <div className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--ink-2)]">
+                        Age
+                      </div>
+                      <input
+                        type="number"
+                        min={0}
+                        max={120}
+                        value={guest.age}
+                        onChange={(event) => updateGuest(index, 'age', event.target.value)}
+                        disabled={guestsSaved || !running}
+                        className="h-12 w-full rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-2)] px-3.5 text-base text-[var(--ink)] outline-none focus:border-transparent focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--brand)] disabled:cursor-not-allowed disabled:text-[var(--muted)] sm:text-[15px]"
+                      />
                     </div>
-                    <input
-                      type="number"
-                      min={0}
-                      max={120}
-                      value={guest.age}
-                      onChange={(event) => updateGuest(index, 'age', event.target.value)}
-                      disabled={guestsSaved || !running}
-                      className="h-12 w-full rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-2)] px-3.5 text-[15px] text-[var(--ink)] outline-none focus:border-transparent focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--brand)] disabled:cursor-not-allowed disabled:text-[var(--muted)]"
-                    />
-                    <p className="mt-1.5 min-h-5 text-[13px]" />
-                  </div>
 
-                  <div className="sm:w-[130px]">
-                    <div className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--ink-2)]">
-                      Gender
+                    <div className="flex-1">
+                      <div className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--ink-2)]">
+                        Gender
+                      </div>
+                      <select
+                        value={guest.gender}
+                        onChange={(event) => updateGuest(index, 'gender', event.target.value)}
+                        disabled={guestsSaved || !running}
+                        className="h-12 w-full rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-2)] px-3 text-base text-[var(--ink)] outline-none focus:border-transparent focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--brand)] disabled:cursor-not-allowed disabled:text-[var(--muted)] sm:text-[15px]"
+                      >
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                        <option value="OTHER">Other</option>
+                      </select>
                     </div>
-                    <select
-                      value={guest.gender}
-                      onChange={(event) => updateGuest(index, 'gender', event.target.value)}
-                      disabled={guestsSaved || !running}
-                      className="h-12 w-full rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-2)] px-3 text-[15px] text-[var(--ink)] outline-none focus:border-transparent focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--brand)] disabled:cursor-not-allowed disabled:text-[var(--muted)]"
-                    >
-                      <option value="MALE">Male</option>
-                      <option value="FEMALE">Female</option>
-                      <option value="OTHER">Other</option>
-                    </select>
-                    <p className="mt-1.5 min-h-5 text-[13px]" />
                   </div>
                 </div>
               </div>
@@ -255,7 +251,7 @@ export default function Checkout() {
         </form>
 
         <aside className="w-full lg:w-[300px]">
-          <div className="sticky top-[88px] rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-5">
+          <div className="rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 sm:sticky sm:top-[88px] sm:p-5">
             <h2 className="m-0 text-base font-bold">Booking summary</h2>
 
             <div className="mt-4 flex flex-col gap-3 text-sm">
@@ -278,9 +274,7 @@ export default function Checkout() {
         open={showExpired}
         onClose={() => navigate('/')}
         title="This hold has expired"
-        footer={
-          <Button onClick={() => navigate('/')}>Search again</Button>
-        }
+        footer={<Button onClick={() => navigate('/')}>Search again</Button>}
       >
         Your rooms were held for ten minutes and that window has closed. The rooms
         are back in the pool, so you'll need to start a new booking.
