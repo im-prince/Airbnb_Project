@@ -77,4 +77,6 @@ public class Booking {
 
     @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
     private Payment payment;
+
+    private LocalDateTime expiresAt;
 }

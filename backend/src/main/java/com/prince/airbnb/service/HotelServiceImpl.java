@@ -40,7 +40,7 @@ public class HotelServiceImpl implements HotelService{
         hotel.setOwner(user);
 
         hotel = hotelRepository.save(hotel);
-        log.info("Created a new hotel with ID: {}", hotelDto.getId());
+        log.info("Created a new hotel with ID: {}", hotel.getId());
         return modelMapper.map(hotel, HotelDto.class);
     }
 

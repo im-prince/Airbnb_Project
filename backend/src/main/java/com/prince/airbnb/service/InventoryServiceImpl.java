@@ -3,6 +3,7 @@ package com.prince.airbnb.service;
 
 import com.prince.airbnb.dto.HotelPriceDto;
 import com.prince.airbnb.dto.HotelSearchRequest;
+import com.prince.airbnb.dto.RoomAvailabilityDto;
 import com.prince.airbnb.entity.Inventory;
 import com.prince.airbnb.entity.Room;
 import com.prince.airbnb.repository.HotelMinPriceRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +76,19 @@ public class InventoryServiceImpl implements InventoryService{
                         dateCount, pageable);
 
         return hotelPage;
+    }
+
+    @Override
+    public BigDecimal calculateTotalPrice(List<Inventory> inventoryList, Integer roomsCount) {
+        BigDecimal perRoomTotal = inventoryList.stream()
+                .map(Inventory::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return perRoomTotal.multiply(BigDecimal.valueOf(roomsCount));
+    }
+
+    @Override
+    public List<RoomAvailabilityDto> getRoomAvailability(Long hotelId, LocalDate startDate, LocalDate endDate) {
+        long dateCount = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        return inventoryRepository.findRoomAvailability(hotelId, startDate, endDate, dateCount);
     }
 }

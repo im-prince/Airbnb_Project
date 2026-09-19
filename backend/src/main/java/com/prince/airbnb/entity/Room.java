@@ -1,5 +1,6 @@
 package com.prince.airbnb.entity;
 
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

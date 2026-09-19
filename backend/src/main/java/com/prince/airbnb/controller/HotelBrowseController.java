@@ -1,16 +1,16 @@
 package com.prince.airbnb.controller;
 
 
-import com.prince.airbnb.dto.HotelDto;
-import com.prince.airbnb.dto.HotelInfoDto;
-import com.prince.airbnb.dto.HotelPriceDto;
-import com.prince.airbnb.dto.HotelSearchRequest;
+import com.prince.airbnb.dto.*;
 import com.prince.airbnb.service.HotelService;
 import com.prince.airbnb.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
 
 
 @RestController
@@ -22,7 +22,7 @@ public class HotelBrowseController {
     private final HotelService hotelService;
 
     @GetMapping("/search")
-    public ResponseEntity<Page<HotelPriceDto>> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
+    public ResponseEntity<Page<HotelPriceDto>> searchHotels(@ModelAttribute HotelSearchRequest hotelSearchRequest) {
 
         var page = inventoryService.searchHotels(hotelSearchRequest);
         return ResponseEntity.ok(page);
@@ -33,5 +33,13 @@ public class HotelBrowseController {
         return ResponseEntity.ok(hotelService.getHotelInfoById(hotelId));
     }
 
+
+    @GetMapping("/{hotelId}/availability")
+    public ResponseEntity<List<RoomAvailabilityDto>> getRoomAvailability(
+            @PathVariable Long hotelId,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+        return ResponseEntity.ok(inventoryService.getRoomAvailability(hotelId, startDate, endDate));
+    }
 
 }

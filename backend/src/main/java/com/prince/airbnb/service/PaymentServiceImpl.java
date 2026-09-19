@@ -55,7 +55,8 @@ public class PaymentServiceImpl implements PaymentService {
             throw new UnAuthorisedException("Booking does not belong to this user with id: " + user.getId());
         }
 
-        if (booking.getBookingStatus() != BookingStatus.GUESTS_ADDED) {
+        if (booking.getBookingStatus() != BookingStatus.GUESTS_ADDED
+                && booking.getBookingStatus() != BookingStatus.PAYMENTS_PENDING) {
             throw new IllegalStateException("Guests must be added before payment can be initiated");
         }
 

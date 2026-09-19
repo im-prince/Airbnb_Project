@@ -1,5 +1,6 @@
 package com.prince.airbnb.repository;
 
+import com.prince.airbnb.dto.RoomAvailabilityDto;
 import com.prince.airbnb.entity.Hotel;
 import com.prince.airbnb.entity.Inventory;
 import com.prince.airbnb.entity.Room;
@@ -58,4 +59,23 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
             @Param("roomsCount") Integer roomsCount
     );
 
+
+    @Query("""
+        SELECT new com.prince.airbnb.dto.RoomAvailabilityDto(
+            i.room.id, i.room.type, i.room.capacity, i.room.photos,
+            i.room.basePrice, MIN(i.price), MIN(i.totalCount - i.bookedCount - i.reservedCount)
+        )
+        FROM Inventory i
+        WHERE i.hotel.id = :hotelId
+            AND i.date BETWEEN :startDate AND :endDate
+            AND i.closed = false
+        GROUP BY i.room
+        HAVING COUNT(i.date) = :dateCount
+        """)
+    List<RoomAvailabilityDto> findRoomAvailability(
+            @Param("hotelId") Long hotelId,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            @Param("dateCount") Long dateCount
+    );
 }

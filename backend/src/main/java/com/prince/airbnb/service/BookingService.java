@@ -12,4 +12,12 @@ public interface BookingService {
     BookingDto initialiseBooking(BookingRequest bookingRequest);
 
     BookingDto addGuests(Long bookingId, List<GuestDto> guestDtoList);
+
+    BookingDto getBookingById(Long bookingId);
+
+    List<BookingDto> getMyBookings();
+
+    BookingDto forceConfirmBooking(Long bookingId);
+
+    void cancelBooking(Long bookingId);
 }

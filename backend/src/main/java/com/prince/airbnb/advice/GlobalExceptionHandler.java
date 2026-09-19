@@ -2,6 +2,7 @@ package com.prince.airbnb.advice;
 
 
 import com.prince.airbnb.exception.ResourceNotFoundException;
+import com.prince.airbnb.exception.UnAuthorisedException;
 import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleResourceNotFound(ResourceNotFoundException exception) {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.NOT_FOUND)
+                .message(exception.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(UnAuthorisedException.class)
+    public ResponseEntity<ApiResponse<?>> handleUnAuthorisedException(UnAuthorisedException exception) {
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .message(exception.getMessage())
+                .build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ApiResponse<?>> handleIllegalStateException(IllegalStateException exception) {
+        ApiError apiError = ApiError.builder()
+                .status(HttpStatus.CONFLICT)
                 .message(exception.getMessage())
                 .build();
         return buildErrorResponseEntity(apiError);
@@ -63,17 +82,3 @@ public class GlobalExceptionHandler {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
