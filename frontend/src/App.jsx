@@ -15,6 +15,7 @@ import Payment from './pages/Payment'
 import BookingDone from './pages/BookingDone'
 import MyTrips from './pages/MyTrips'
 import TripDetail from './pages/TripDetail'
+import Profile from './pages/Profile'
 
 function Placeholder({ name }) {
   return (
@@ -81,14 +82,7 @@ export default function App() {
           }
         />
 
-        <Route
-          path="/profile"
-          element={
-            <RequireAuth>
-              <Placeholder name="Profile" />
-            </RequireAuth>
-          }
-        />
+        <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
 
         <Route
           path="/manager"

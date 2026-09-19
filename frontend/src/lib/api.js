@@ -43,14 +43,21 @@ export function readUserFromToken(token) {
     const middle = token.split('.')[1]
     const json = atob(middle.replace(/-/g, '+').replace(/_/g, '/'))
     const claims = JSON.parse(json)
-    return {
-      id: claims.sub,
-      email: claims.email,
-      roles: claims.roles,
-    }
+    const roles = parseRoles(claims.roles)
+    return { id: claims.sub, email: claims.email, roles }
   } catch {
     return null
   }
+}
+
+function parseRoles(raw) {
+  if (Array.isArray(raw)) return raw
+  if (typeof raw !== 'string') return []
+  return raw
+    .replace(/[[\]]/g, '')
+    .split(',')
+    .map((role) => role.trim())
+    .filter(Boolean)
 }
 
 export async function signup({ name, email, password }) {
@@ -58,24 +65,12 @@ export async function signup({ name, email, password }) {
   return response.data?.data || response.data
 }
 
-export function logout() {
-  localStorage.removeItem('token')
-}
-
-export function getToken() {
-  return localStorage.getItem('token')
-}
+export function logout() { localStorage.removeItem('token') }
+export function getToken() { return localStorage.getItem('token') }
 
 export async function searchHotels({ city, from, to, guests, page = 0, size = 6 }) {
   const response = await api.get('/hotels/search', {
-    params: {
-      city,
-      startDate: from,
-      endDate: to,
-      roomsCount: guests,
-      page,
-      size,
-    },
+    params: { city, startDate: from, endDate: to, roomsCount: guests, page, size },
   })
   return response.data?.data || response.data
 }
@@ -93,13 +88,7 @@ export async function getAvailability(hotelId, { from, to }) {
 }
 
 export async function initBooking({ hotelId, roomId, checkInDate, checkOutDate, roomsCount }) {
-  const response = await api.post('/bookings/init', {
-    hotelId,
-    roomId,
-    checkInDate,
-    checkOutDate,
-    roomsCount,
-  })
+  const response = await api.post('/bookings/init', { hotelId, roomId, checkInDate, checkOutDate, roomsCount })
   return response.data?.data || response.data
 }
 
@@ -123,19 +112,20 @@ export async function getMyBookings() {
   return response.data?.data || response.data
 }
 
+export async function getProfile() {
+  const response = await api.get('/users/profile')
+  return response.data?.data || response.data
+}
+
+export async function updateProfile(changes) {
+  await api.patch('/users/profile', changes)
+}
+
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
-  if (error.response?.data?.error?.message) {
-    return error.response.data.error.message
-  }
-  if (error.response?.data?.apiError?.message) {
-    return error.response.data.apiError.message
-  }
-  if (error.response?.data?.message) {
-    return error.response.data.message
-  }
-  if (error.code === 'ERR_NETWORK') {
-    return 'Could not reach the server. Is the backend running?'
-  }
+  if (error.response?.data?.error?.message) return error.response.data.error.message
+  if (error.response?.data?.apiError?.message) return error.response.data.apiError.message
+  if (error.response?.data?.message) return error.response.data.message
+  if (error.code === 'ERR_NETWORK') return 'Could not reach the server. Is the backend running?'
   return fallback
 }
 
