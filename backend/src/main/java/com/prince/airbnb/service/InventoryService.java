@@ -2,9 +2,7 @@ package com.prince.airbnb.service;
 
 
 
-import com.prince.airbnb.dto.HotelPriceDto;
-import com.prince.airbnb.dto.HotelSearchRequest;
-import com.prince.airbnb.dto.RoomAvailabilityDto;
+import com.prince.airbnb.dto.*;
 import com.prince.airbnb.entity.Inventory;
 import com.prince.airbnb.entity.Room;
 import org.springframework.data.domain.Page;
@@ -26,5 +24,9 @@ public interface InventoryService {
     BigDecimal calculateTotalPrice(List<Inventory> inventoryList, Integer roomsCount);
 
     List<RoomAvailabilityDto> getRoomAvailability(Long hotelId, LocalDate startDate, LocalDate endDate);
+
+    List<InventoryDto> getAllInventoryByRoom(Long roomId);
+
+    void updateInventory(Long roomId, UpdateInventoryRequestDto updateInventoryRequestDto);
 
 }

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -132,6 +133,19 @@ public class HotelServiceImpl implements HotelService{
                 .toList();
 
         return new HotelInfoDto(modelMapper.map(hotel, HotelDto.class), rooms);
+    }
+
+
+
+    @Override
+    public List<HotelDto> getAllHotels() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("Getting all hotels for the manager with ID: {}", user.getId());
+        List<Hotel> hotels = hotelRepository.findByOwner(user);
+
+        return hotels.stream()
+                .map((element) -> modelMapper.map(element, HotelDto.class))
+                .collect(Collectors.toList());
     }
 
 }
