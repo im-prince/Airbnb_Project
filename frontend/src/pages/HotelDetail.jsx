@@ -243,6 +243,9 @@ export default function HotelDetail() {
 }
 
 function RoomRow({ room, picked, onPick }) {
+  const [photoBroken, setPhotoBroken] = useState(false)
+  const photo = room.photos?.[0]
+
   return (
     <button
       onClick={onPick}
@@ -252,7 +255,18 @@ function RoomRow({ room, picked, onPick }) {
           : 'border-[var(--line)] bg-[var(--surface)] hover:bg-[var(--surface-2)]'
       }`}
     >
-      <div className="h-16 w-20 shrink-0 rounded-[var(--r-md)] bg-[#1B3557]" />
+      <div className="flex h-16 w-20 shrink-0 items-center justify-center overflow-hidden rounded-[var(--r-md)] bg-[#1B3557]">
+        {photo && !photoBroken ? (
+          <img
+            src={photo}
+            alt={room.type}
+            onError={() => setPhotoBroken(true)}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <ImageOff size={18} strokeWidth={1.5} className="text-[#5C7796]" />
+        )}
+      </div>
 
       <div className="min-w-0 flex-1">
         <div className="font-semibold">{room.type}</div>
