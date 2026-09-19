@@ -13,6 +13,7 @@ import Forbidden from './pages/Forbidden'
 import Checkout from './pages/Checkout'
 import Payment from './pages/Payment'
 import BookingDone from './pages/BookingDone'
+import MyTrips from './pages/MyTrips'
 
 function Placeholder({ name }) {
   return (
@@ -74,7 +75,7 @@ export default function App() {
           path="/trips"
           element={
             <RequireAuth>
-              <Placeholder name="My trips" />
+              <MyTrips />
             </RequireAuth>
           }
         />
