@@ -3,10 +3,12 @@ import { useState } from 'react'
 import { Search } from 'lucide-react'
 
 const cities = [
-  { name: 'Jaipur', tone: '#1B3557' },
-  { name: 'Goa', tone: '#9A5240' },
-  { name: 'Manali', tone: '#2C4A63' },
-  { name: 'Udaipur', tone: '#7C4636' },
+  { name: 'Jaipur', tone: '#1B3557', photo: 'https://images.unsplash.com/photo-1545126178-862cdb469409?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fGphaXB1cnxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'Goa', tone: '#9A5240', photo: 'https://plus.unsplash.com/premium_photo-1697729701846-e34563b06d47?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Z29hfGVufDB8fDB8fHww' },
+  { name: 'Manali', tone: '#2C4A63', photo: 'https://images.unsplash.com/photo-1594102552386-793e5a27ad10?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+  { name: 'Udaipur', tone: '#7C4636', photo: 'https://images.unsplash.com/photo-1695956353120-54ce5e91632b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dWRhaXB1cnxlbnwwfHwwfHx8MA%3D%3D' },
+  { name: 'Mumbai', tone: '#3E5C4A', photo: '' },
+  { name: 'Rishikesh', tone: '#5A4A7C', photo: '' },
 ]
 
 function addDays(days) {
@@ -111,18 +113,26 @@ export default function Home() {
         <h2 className="mb-4 text-lg font-bold sm:text-xl">Popular right now</h2>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-4">
           {cities.map((item) => (
-            <button
-              key={item.name}
-              onClick={() => {
-                setCity(item.name)
-                navigate(`/search?city=${item.name}&from=${checkIn}&to=${checkOut}&guests=${guests}`)
-              }}
-              style={{ backgroundColor: item.tone }}
-              className="relative flex h-24 items-end rounded-[var(--r-md)] p-3 text-left text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 sm:h-32"
-            >
-              {item.name}
-            </button>
-          ))}
+  <button
+    key={item.name}
+    onClick={() => {
+      setCity(item.name)
+      navigate(`/search?city=${item.name}&from=${checkIn}&to=${checkOut}&guests=${guests}`)
+    }}
+    style={{
+      backgroundColor: item.tone,
+      backgroundImage: item.photo ? `url(${item.photo})` : undefined,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    }}
+    className="relative flex h-24 items-end overflow-hidden rounded-[var(--r-md)] p-3 text-left text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-0.5 sm:h-32"
+  >
+    {item.photo && (
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+    )}
+    <span className="relative">{item.name}</span>
+  </button>
+    ))}
         </div>
       </section>
     </div>
