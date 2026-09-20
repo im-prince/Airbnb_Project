@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { getBooking, readError } from '../lib/api'
+import { getBooking, cancelBooking, readError } from '../lib/api'
+import { useToast } from '../lib/useToast'
 import Button from '../components/Button'
 import { Skeleton } from '../components/Skeleton'
 
@@ -31,10 +32,12 @@ const statusNote = {
 export default function TripDetail() {
   const { bookingId } = useParams()
   const navigate = useNavigate()
+  const { toast } = useToast()
 
   const [booking, setBooking] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [cancelling, setCancelling] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -57,6 +60,24 @@ export default function TripDetail() {
       cancelled = true
     }
   }, [bookingId])
+
+  async function handleCancel() {
+    if (cancelling) return
+    const sure = window.confirm('Cancel this booking? This cannot be undone.')
+    if (!sure) return
+
+    setCancelling(true)
+    try {
+      await cancelBooking(bookingId)
+      const fresh = await getBooking(bookingId)
+      setBooking(fresh)
+      toast.success('Booking cancelled.')
+    } catch (err) {
+      toast.error(readError(err, 'Could not cancel this booking. Please try again.'))
+    } finally {
+      setCancelling(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -150,8 +171,14 @@ export default function TripDetail() {
       </div>
 
       <div className="mt-6 flex justify-end">
-        <Button variant="danger" disabled={!canCancel} title="Cancellation is coming soon">
-          Cancel booking
+        <Button
+          variant="danger"
+          disabled={!canCancel}
+          loading={cancelling}
+          onClick={handleCancel}
+          title={canCancel ? undefined : 'This booking cannot be cancelled'}
+        >
+          {cancelling ? 'Cancelling' : 'Cancel booking'}
         </Button>
       </div>
     </div>

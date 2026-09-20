@@ -214,6 +214,10 @@ export async function getHotelReport(hotelId, { startDate, endDate } = {}) {
   return response.data?.data || response.data
 }
 
+export async function cancelBooking(bookingId) {
+  await api.post(`/bookings/${bookingId}/cancel`)
+}
+
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
   if (error.response?.data?.error?.message) return error.response.data.error.message
   if (error.response?.data?.apiError?.message) return error.response.data.apiError.message
