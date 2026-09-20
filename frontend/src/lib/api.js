@@ -202,6 +202,18 @@ export async function updateInventory(roomId, changes) {
   return response.data?.data || response.data
 }
 
+export async function getHotelBookings(hotelId) {
+  const response = await api.get(`/admin/hotels/${hotelId}/bookings`)
+  return response.data?.data || response.data
+}
+
+export async function getHotelReport(hotelId, { startDate, endDate } = {}) {
+  const response = await api.get(`/admin/hotels/${hotelId}/reports`, {
+    params: { startDate, endDate },
+  })
+  return response.data?.data || response.data
+}
+
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
   if (error.response?.data?.error?.message) return error.response.data.error.message
   if (error.response?.data?.apiError?.message) return error.response.data.apiError.message

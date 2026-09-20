@@ -118,6 +118,12 @@ export default function ManagerDashboard() {
                 <Link to={`/manager/hotels/${hotel.id}/rooms`}>
                   <Button variant="secondary">Rooms</Button>
                 </Link>
+                <Link to={`/manager/hotels/${hotel.id}/bookings`}>
+                  <Button variant="secondary">Bookings</Button>
+                </Link>
+                <Link to={`/manager/hotels/${hotel.id}/reports`}>
+                  <Button variant="secondary">Reports</Button>
+                </Link>
                 <Link to={`/manager/hotels/${hotel.id}/edit`}>
                   <Button variant="secondary">Edit</Button>
                 </Link>
