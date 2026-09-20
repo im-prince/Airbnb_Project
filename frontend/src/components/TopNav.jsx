@@ -54,12 +54,13 @@ export default function TopNav() {
 
         {signedIn ? (
           <>
-            <div
+            <Link
+              to="/profile"
               title={user?.name || user?.email}
-              className="hidden h-9 w-9 items-center justify-center rounded-full bg-[var(--brand-soft)] text-sm font-semibold text-[var(--brand)] sm:flex"
+              className="hidden h-9 w-9 items-center justify-center rounded-full bg-[var(--brand-soft)] text-sm font-semibold text-[var(--brand)] no-underline transition-opacity duration-150 hover:opacity-80 sm:flex"
             >
               {initials}
-            </div>
+            </Link>
             <button
               onClick={handleSignOut}
               className={`hidden sm:block ${linkClass} transition-colors duration-150 hover:text-[var(--brand)]`}
@@ -108,14 +109,18 @@ export default function TopNav() {
                 My trips
               </NavLink>
               <div className="my-2 border-t border-[var(--line)]" />
-              <div className="flex items-center gap-3 px-3 py-2">
+              <Link
+                to="/profile"
+                onClick={closeMenu}
+                className="flex items-center gap-3 rounded-[var(--r-md)] px-3 py-2 no-underline hover:bg-[var(--surface-2)]"
+              >
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--brand-soft)] text-sm font-semibold text-[var(--brand)]">
                   {initials}
                 </div>
                 <span className="truncate text-sm text-[var(--ink-2)]">
                   {user?.name || user?.email}
                 </span>
-              </div>
+              </Link>
               <button
                 onClick={handleSignOut}
                 className="block w-full rounded-[var(--r-md)] px-3 py-2.5 text-left text-[15px] font-medium text-[var(--danger)] hover:bg-[var(--danger-soft)]"
