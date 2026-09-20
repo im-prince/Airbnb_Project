@@ -93,15 +93,15 @@ export default function App() {
         <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
         <Route path="/guests" element={<RequireAuth><SavedGuests /></RequireAuth>} />
 
-        <Route path="/manager" element={<RequireAuth><ManagerDashboard /></RequireAuth>} />
-        <Route path="/manager/hotels/new" element={<RequireAuth><HotelForm /></RequireAuth>} />
-        <Route path="/manager/hotels/:hotelId/edit" element={<RequireAuth><HotelForm /></RequireAuth>} />
-        <Route path="/manager/hotels/:hotelId/rooms" element={<RequireAuth><RoomsList /></RequireAuth>} />
-        <Route path="/manager/hotels/:hotelId/rooms/new" element={<RequireAuth><RoomForm /></RequireAuth>} />
-        <Route path="/manager/hotels/:hotelId/rooms/:roomId/edit" element={<RequireAuth><RoomForm /></RequireAuth>} />
-        <Route path="/manager/hotels/:hotelId/rooms/:roomId/inventory" element={<RequireAuth><InventoryCalendar /></RequireAuth>} />
-        <Route path="/manager/hotels/:hotelId/bookings" element={<RequireAuth><HotelBookings /></RequireAuth>} />
-        <Route path="/manager/hotels/:hotelId/reports" element={<RequireAuth><RevenueReport /></RequireAuth>} />
+        <Route path="/manager" element={<RequireAuth role="HOTEL_MANAGER"><ManagerDashboard /></RequireAuth>} />
+        <Route path="/manager/hotels/new" element={<RequireAuth role="HOTEL_MANAGER"><HotelForm /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/edit" element={<RequireAuth role="HOTEL_MANAGER"><HotelForm /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/rooms" element={<RequireAuth role="HOTEL_MANAGER"><RoomsList /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/rooms/new" element={<RequireAuth role="HOTEL_MANAGER"><RoomForm /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/rooms/:roomId/edit" element={<RequireAuth role="HOTEL_MANAGER"><RoomForm /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/rooms/:roomId/inventory" element={<RequireAuth role="HOTEL_MANAGER"><InventoryCalendar /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/bookings" element={<RequireAuth role="HOTEL_MANAGER"><HotelBookings /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/reports" element={<RequireAuth role="HOTEL_MANAGER"><RevenueReport /></RequireAuth>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
