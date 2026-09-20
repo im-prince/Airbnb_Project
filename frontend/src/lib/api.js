@@ -139,6 +139,35 @@ export async function deleteSavedGuest(guestId) {
   await api.delete(`/users/guests/${guestId}`)
 }
 
+export async function getMyHotels() {
+  const response = await api.get('/admin/hotels')
+  return response.data?.data || response.data
+}
+
+export async function createHotel(hotel) {
+  const response = await api.post('/admin/hotels', hotel)
+  return response.data?.data || response.data
+}
+
+export async function getHotelAdmin(hotelId) {
+  const response = await api.get(`/admin/hotels/${hotelId}`)
+  return response.data?.data || response.data
+}
+
+export async function updateHotel(hotelId, hotel) {
+  const response = await api.put(`/admin/hotels/${hotelId}`, hotel)
+  return response.data?.data || response.data
+}
+
+export async function deleteHotel(hotelId) {
+  await api.delete(`/admin/hotels/${hotelId}`)
+}
+
+export async function activateHotel(hotelId) {
+  const response = await api.patch(`/admin/hotels/${hotelId}/activate`)
+  return response.data?.data || response.data
+}
+
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
   if (error.response?.data?.error?.message) return error.response.data.error.message
   if (error.response?.data?.apiError?.message) return error.response.data.apiError.message
