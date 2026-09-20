@@ -121,6 +121,24 @@ export async function updateProfile(changes) {
   await api.patch('/users/profile', changes)
 }
 
+export async function getSavedGuests() {
+  const response = await api.get('/users/guests')
+  return response.data?.data || response.data
+}
+
+export async function createSavedGuest(guest) {
+  const response = await api.post('/users/guests', guest)
+  return response.data?.data || response.data
+}
+
+export async function updateSavedGuest(guestId, guest) {
+  await api.put(`/users/guests/${guestId}`, guest)
+}
+
+export async function deleteSavedGuest(guestId) {
+  await api.delete(`/users/guests/${guestId}`)
+}
+
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
   if (error.response?.data?.error?.message) return error.response.data.error.message
   if (error.response?.data?.apiError?.message) return error.response.data.apiError.message

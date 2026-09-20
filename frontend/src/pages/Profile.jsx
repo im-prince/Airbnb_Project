@@ -4,6 +4,7 @@ import { useAuth } from '../lib/useAuth'
 import Button from '../components/Button'
 import Input from '../components/Input'
 import { Skeleton } from '../components/Skeleton'
+import { Link } from 'react-router-dom'
 
 export default function Profile() {
   const { user } = useAuth()
@@ -103,8 +104,15 @@ export default function Profile() {
 
   return (
     <div className="mx-auto max-w-[640px] px-4 py-6 sm:px-6 sm:py-10">
-      <h1 className="m-0 text-2xl font-bold tracking-tight">Profile</h1>
+            <h1 className="m-0 text-2xl font-bold tracking-tight">Profile</h1>
       <p className="mt-1 text-sm text-[var(--muted)]">Manage your personal details.</p>
+
+      <Link
+        to="/guests"
+        className="mt-4 inline-block text-sm font-semibold text-[var(--brand)] no-underline hover:underline"
+      >
+        Manage saved travellers →
+      </Link>
 
       <form
         onSubmit={handleSave}

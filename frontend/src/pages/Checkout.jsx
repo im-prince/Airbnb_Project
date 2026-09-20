@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Plus, X, Clock } from 'lucide-react'
-import { getBooking, addGuests, readError } from '../lib/api'
+import { getBooking, addGuests, getSavedGuests, readError } from '../lib/api'
 import { useCountdown } from '../lib/useCountdown'
 import { useToast } from '../lib/useToast'
 import Input from '../components/Input'
@@ -27,6 +27,7 @@ export default function Checkout() {
   const [booking, setBooking] = useState(null)
   const [guests, setGuests] = useState([blankGuest()])
   const [guestsSaved, setGuestsSaved] = useState(false)
+  const [savedGuests, setSavedGuests] = useState([])
   const [busy, setBusy] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -60,6 +61,22 @@ export default function Checkout() {
   }, [bookingId])
 
   useEffect(() => {
+    let cancelled = false
+
+    getSavedGuests()
+      .then((data) => {
+        if (!cancelled) setSavedGuests(data || [])
+      })
+      .catch(() => {
+        // saved guests are a convenience, not required — fail silently
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
     if (timer.expired && booking && booking.bookingStatus === 'RESERVED') {
       setShowExpired(true)
     }
@@ -68,6 +85,19 @@ export default function Checkout() {
   function updateGuest(index, field, value) {
     setGuests((list) =>
       list.map((guest, i) => (i === index ? { ...guest, [field]: value } : guest))
+    )
+  }
+
+  function applySavedGuest(index, guestId) {
+    if (!guestId) return
+    const saved = savedGuests.find((guest) => String(guest.id) === guestId)
+    if (!saved) return
+    setGuests((list) =>
+      list.map((guest, i) =>
+        i === index
+          ? { name: saved.name, gender: saved.gender, age: String(saved.age) }
+          : guest
+      )
     )
   }
 
@@ -135,6 +165,7 @@ export default function Checkout() {
   const nights = countNights(booking.checkInDate, booking.checkOutDate)
   const running = !timer.expired
   const lowTime = timer.left > 0 && timer.left < 120
+  const canPickSaved = savedGuests.length > 0 && !guestsSaved && running
 
   return (
     <div className="mx-auto max-w-[1000px] px-4 py-6 sm:px-6 sm:py-8">
@@ -187,6 +218,26 @@ export default function Checkout() {
                 </div>
 
                 <div className="flex flex-col gap-3">
+                  {canPickSaved && (
+                    <div>
+                      <div className="mb-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--ink-2)]">
+                        Use a saved guest
+                      </div>
+                      <select
+                        value=""
+                        onChange={(event) => applySavedGuest(index, event.target.value)}
+                        className="h-12 w-full rounded-[var(--r-md)] border border-[var(--line)] bg-[var(--surface-2)] px-3.5 text-base text-[var(--ink)] outline-none focus:border-transparent focus:bg-[var(--surface)] focus:ring-2 focus:ring-[var(--brand)] sm:text-[15px]"
+                      >
+                        <option value="">Type manually…</option>
+                        {savedGuests.map((saved) => (
+                          <option key={saved.id} value={saved.id}>
+                            {saved.name} · {saved.age}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
                   <Input
                     label="Full name"
                     value={guest.name}

@@ -16,6 +16,7 @@ import BookingDone from './pages/BookingDone'
 import MyTrips from './pages/MyTrips'
 import TripDetail from './pages/TripDetail'
 import Profile from './pages/Profile'
+import SavedGuests from './pages/SavedGuests'
 
 function Placeholder({ name }) {
   return (
@@ -83,6 +84,7 @@ export default function App() {
         />
 
         <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
+        <Route path="/guests" element={<RequireAuth><SavedGuests /></RequireAuth>} />
 
         <Route
           path="/manager"
