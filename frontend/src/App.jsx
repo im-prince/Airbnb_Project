@@ -19,6 +19,8 @@ import Profile from './pages/Profile'
 import SavedGuests from './pages/SavedGuests'
 import ManagerDashboard from './pages/ManagerDashboard'
 import HotelForm from './pages/HotelForm'
+import RoomsList from './pages/RoomsList'
+import RoomForm from './pages/RoomForm'
 
 function Placeholder({ name }) {
   return (
@@ -91,6 +93,9 @@ export default function App() {
         <Route path="/manager" element={<RequireAuth><ManagerDashboard /></RequireAuth>} />
         <Route path="/manager/hotels/new" element={<RequireAuth><HotelForm /></RequireAuth>} />
         <Route path="/manager/hotels/:hotelId/edit" element={<RequireAuth><HotelForm /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/rooms" element={<RequireAuth><RoomsList /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/rooms/new" element={<RequireAuth><RoomForm /></RequireAuth>} />
+        <Route path="/manager/hotels/:hotelId/rooms/:roomId/edit" element={<RequireAuth><RoomForm /></RequireAuth>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

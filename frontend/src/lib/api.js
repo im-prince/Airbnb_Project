@@ -168,6 +168,30 @@ export async function activateHotel(hotelId) {
   return response.data?.data || response.data
 }
 
+export async function createRoom(hotelId, room) {
+  const response = await api.post(`/admin/hotels/${hotelId}/rooms`, room)
+  return response.data?.data || response.data
+}
+
+export async function getRooms(hotelId) {
+  const response = await api.get(`/admin/hotels/${hotelId}/rooms`)
+  return response.data?.data || response.data
+}
+
+export async function getRoomAdmin(hotelId, roomId) {
+  const response = await api.get(`/admin/hotels/${hotelId}/rooms/${roomId}`)
+  return response.data?.data || response.data
+}
+
+export async function updateRoom(hotelId, roomId, room) {
+  const response = await api.put(`/admin/hotels/${hotelId}/rooms/${roomId}`, room)
+  return response.data?.data || response.data
+}
+
+export async function deleteRoom(hotelId, roomId) {
+  await api.delete(`/admin/hotels/${hotelId}/rooms/${roomId}`)
+}
+
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
   if (error.response?.data?.error?.message) return error.response.data.error.message
   if (error.response?.data?.apiError?.message) return error.response.data.apiError.message
