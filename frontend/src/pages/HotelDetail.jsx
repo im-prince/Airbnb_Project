@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom'
-import { Wifi, Waves, Coffee, Car, Star, ImageOff } from 'lucide-react'
+import { Wifi, Waves, Coffee, Car, Star, ImageOff, Calendar, Users } from 'lucide-react'
 import { getHotel, initBooking, readError } from '../lib/api'
 import { useAuth } from '../lib/useAuth'
 import { useToast } from '../lib/useToast'
@@ -23,7 +23,7 @@ const amenityIcons = {
 
 export default function HotelDetail() {
   const { hotelId } = useParams()
-  const [params] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const { signedIn } = useAuth()
   const { toast } = useToast()
@@ -35,9 +35,9 @@ export default function HotelDetail() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const from = params.get('from') || ''
-  const to = params.get('to') || ''
-  const guests = params.get('guests') || '1'
+  const from = searchParams.get('from') || ''
+  const to = searchParams.get('to') || ''
+  const guests = searchParams.get('guests') || '1'
 
   useEffect(() => {
     let cancelled = false
@@ -67,9 +67,18 @@ export default function HotelDetail() {
   const rooms = info?.rooms || []
   const nights = countNights(from, to)
 
+  function updateTrip(changes) {
+    const next = new URLSearchParams(searchParams)
+    Object.entries(changes).forEach(([key, value]) => {
+      if (value) next.set(key, value)
+      else next.delete(key)
+    })
+    setSearchParams(next, { replace: true })
+  }
+
   async function reserve() {
     if (!signedIn) {
-      const here = `/hotels/${hotelId}?${params}`
+      const here = `/hotels/${hotelId}?${searchParams}`
       navigate(`/login?next=${encodeURIComponent(here)}`)
       return
     }
@@ -149,6 +158,8 @@ export default function HotelDetail() {
             {' · '}
             {hotel?.city}
           </p>
+
+          <TripEditor from={from} to={to} guests={guests} onChange={updateTrip} />
 
           {hotel?.amenities?.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-5 border-b border-[var(--line)] pb-5 sm:mt-6 sm:gap-6 sm:pb-6">
@@ -278,6 +289,50 @@ export default function HotelDetail() {
           </Button>
         </div>
       </div>
+    </div>
+  )
+}
+
+function TripEditor({ from, to, guests, onChange }) {
+  return (
+    <div className="mt-5 flex flex-wrap items-end gap-3 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-3 sm:mt-6 sm:p-4">
+      <label className="flex min-w-[130px] flex-1 flex-col gap-1">
+        <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--muted)]">
+          <Calendar size={12} /> Check in
+        </span>
+        <input
+          type="date"
+          value={from}
+          onChange={(e) => onChange({ from: e.target.value })}
+          className="rounded-[var(--r-sm)] border border-[var(--line)] px-2 py-1.5 text-sm"
+        />
+      </label>
+
+      <label className="flex min-w-[130px] flex-1 flex-col gap-1">
+        <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--muted)]">
+          <Calendar size={12} /> Check out
+        </span>
+        <input
+          type="date"
+          value={to}
+          min={from || undefined}
+          onChange={(e) => onChange({ to: e.target.value })}
+          className="rounded-[var(--r-sm)] border border-[var(--line)] px-2 py-1.5 text-sm"
+        />
+      </label>
+
+      <label className="flex min-w-[100px] flex-col gap-1">
+        <span className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--muted)]">
+          <Users size={12} /> Guests
+        </span>
+        <input
+          type="number"
+          min={1}
+          value={guests}
+          onChange={(e) => onChange({ guests: e.target.value || '1' })}
+          className="rounded-[var(--r-sm)] border border-[var(--line)] px-2 py-1.5 text-sm"
+        />
+      </label>
     </div>
   )
 }
