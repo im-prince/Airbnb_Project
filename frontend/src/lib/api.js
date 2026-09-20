@@ -192,6 +192,16 @@ export async function deleteRoom(hotelId, roomId) {
   await api.delete(`/admin/hotels/${hotelId}/rooms/${roomId}`)
 }
 
+export async function getInventory(roomId) {
+  const response = await api.get(`/admin/inventory/rooms/${roomId}`)
+  return response.data?.data || response.data
+}
+
+export async function updateInventory(roomId, changes) {
+  const response = await api.patch(`/admin/inventory/rooms/${roomId}`, changes)
+  return response.data?.data || response.data
+}
+
 export function readError(error, fallback = 'Something went wrong. Please try again.') {
   if (error.response?.data?.error?.message) return error.response.data.error.message
   if (error.response?.data?.apiError?.message) return error.response.data.apiError.message

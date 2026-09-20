@@ -119,6 +119,9 @@ export default function RoomsList() {
               </div>
 
               <div className="flex shrink-0 items-center gap-2">
+                <Link to={`/manager/hotels/${hotelId}/rooms/${room.id}/inventory`}>
+                  <Button variant="secondary">Pricing</Button>
+                </Link>
                 <Link to={`/manager/hotels/${hotelId}/rooms/${room.id}/edit`}>
                   <Button variant="secondary">
                     <Pencil size={14} className="mr-1 inline" /> Edit
