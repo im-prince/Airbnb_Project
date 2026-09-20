@@ -4,6 +4,7 @@ import { getHotelAdmin, getHotelReport, readError } from '../lib/api'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import { Skeleton } from '../components/Skeleton'
+import { managerRoutes } from '../lib/managerRoutes'
 
 const rupees = new Intl.NumberFormat('en-IN', {
   style: 'currency',
@@ -67,11 +68,11 @@ export default function RevenueReport() {
 
   return (
     <div className="mx-auto max-w-[760px] px-4 py-6 sm:px-6 sm:py-10">
-      <Link to="/manager" className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]">
+      <Link to={managerRoutes.dashboard} className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]">
         ← Back to your hotels
       </Link>
 
-      <h1 className="mt-4 text-2xl font-bold tracking-tight">
+      <h1 className="mt-4 text-xl font-bold tracking-tight sm:text-2xl">
         {hotel ? `${hotel.name} — Revenue` : 'Revenue'}
       </h1>
       <p className="mt-1 text-sm text-[var(--muted)]">
@@ -97,7 +98,7 @@ export default function RevenueReport() {
           onChange={(event) => setEndDate(event.target.value)}
           className="sm:w-[200px]"
         />
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="w-full sm:w-auto">
           {loading ? 'Loading…' : 'Apply'}
         </Button>
       </form>

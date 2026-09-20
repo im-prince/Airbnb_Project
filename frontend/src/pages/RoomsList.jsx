@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Plus, BedDouble, Pencil, Trash2 } from 'lucide-react'
 import { getHotelAdmin, getRooms, deleteRoom, readError } from '../lib/api'
+import { managerRoutes } from '../lib/managerRoutes'
 import Button from '../components/Button'
 import { Skeleton } from '../components/Skeleton'
 import EmptyState from '../components/EmptyState'
@@ -72,21 +73,21 @@ export default function RoomsList() {
 
   return (
     <div className="mx-auto max-w-[880px] px-4 py-6 sm:px-6 sm:py-10">
-      <Link to="/manager" className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]">
+      <Link to={managerRoutes.dashboard} className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]">
         ← Back to your hotels
       </Link>
 
-      <div className="mt-4 flex items-center justify-between gap-3">
+      <div className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="m-0 text-2xl font-bold tracking-tight">
+          <h1 className="m-0 text-xl font-bold tracking-tight sm:text-2xl">
             {hotel ? `${hotel.name} — Rooms` : 'Rooms'}
           </h1>
           <p className="mt-1 text-sm text-[var(--muted)]">
             Manage room types, pricing, and capacity.
           </p>
         </div>
-        <Link to={`/manager/hotels/${hotelId}/rooms/new`}>
-          <Button className="shrink-0">
+        <Link to={managerRoutes.newRoom(hotelId)} className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">
             <Plus size={16} className="mr-1 inline" /> Add room
           </Button>
         </Link>
@@ -118,12 +119,12 @@ export default function RoomsList() {
                 </p>
               </div>
 
-              <div className="flex shrink-0 items-center gap-2">
-                <Link to={`/manager/hotels/${hotelId}/rooms/${room.id}/inventory`}>
-                  <Button variant="secondary">Pricing</Button>
+              <div className="flex shrink-0 flex-wrap items-center gap-2">
+                <Link to={managerRoutes.inventory(hotelId, room.id)} className="flex-1 sm:flex-none">
+                  <Button variant="secondary" className="w-full">Pricing</Button>
                 </Link>
-                <Link to={`/manager/hotels/${hotelId}/rooms/${room.id}/edit`}>
-                  <Button variant="secondary">
+                <Link to={managerRoutes.editRoom(hotelId, room.id)} className="flex-1 sm:flex-none">
+                  <Button variant="secondary" className="w-full">
                     <Pencil size={14} className="mr-1 inline" /> Edit
                   </Button>
                 </Link>

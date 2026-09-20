@@ -146,10 +146,11 @@ export default function HotelForm() {
         ← Back to your hotels
       </Link>
 
-      <h1 className="mt-4 text-2xl font-bold tracking-tight">
-        {editing ? 'Edit hotel' : 'New hotel'}
-      </h1>
-
+        <div className="flex justify-end">
+          <Button type="submit" disabled={saving} className="w-full sm:w-auto">
+            {saving ? 'Saving…' : editing ? 'Save changes' : 'Create hotel'}
+          </Button>
+        </div>
       <form
         onSubmit={handleSubmit}
         className="mt-6 flex flex-col gap-6 rounded-[var(--r-lg)] border border-[var(--line)] bg-[var(--surface)] p-4 sm:p-6"

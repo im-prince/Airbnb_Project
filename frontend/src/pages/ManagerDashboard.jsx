@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus, Building2 } from 'lucide-react'
 import { getMyHotels, activateHotel, readError } from '../lib/api'
+import { managerRoutes } from '../lib/managerRoutes'
 import Button from '../components/Button'
 import { Skeleton } from '../components/Skeleton'
 import EmptyState from '../components/EmptyState'
@@ -50,15 +51,15 @@ export default function ManagerDashboard() {
 
   return (
     <div className="mx-auto max-w-[880px] px-4 py-6 sm:px-6 sm:py-10">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="m-0 text-2xl font-bold tracking-tight">Your hotels</h1>
+          <h1 className="m-0 text-xl font-bold tracking-tight sm:text-2xl">Your hotels</h1>
           <p className="mt-1 text-sm text-[var(--muted)]">
             Manage your listings, rooms, and pricing.
           </p>
         </div>
-        <Link to="/manager/hotels/new">
-          <Button className="shrink-0">
+        <Link to={managerRoutes.newHotel} className="w-full sm:w-auto">
+          <Button className="w-full sm:w-auto">
             <Plus size={16} className="mr-1 inline" /> Add hotel
           </Button>
         </Link>
@@ -105,27 +106,28 @@ export default function ManagerDashboard() {
                 <p className="mt-1 text-sm text-[var(--muted)]">{hotel.city}</p>
               </div>
 
-              <div className="flex shrink-0 flex-wrap items-center gap-2">
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0 sm:flex-wrap sm:items-center">
                 {!hotel.active && (
                   <Button
                     variant="secondary"
                     onClick={() => handleActivate(hotel.id)}
                     disabled={activatingId === hotel.id}
+                    className="col-span-2 sm:col-span-1"
                   >
                     {activatingId === hotel.id ? 'Activating…' : 'Activate'}
                   </Button>
                 )}
-                <Link to={`/manager/hotels/${hotel.id}/rooms`}>
-                  <Button variant="secondary">Rooms</Button>
+                <Link to={managerRoutes.rooms(hotel.id)}>
+                  <Button variant="secondary" className="w-full">Rooms</Button>
                 </Link>
-                <Link to={`/manager/hotels/${hotel.id}/bookings`}>
-                  <Button variant="secondary">Bookings</Button>
+                <Link to={managerRoutes.bookings(hotel.id)}>
+                  <Button variant="secondary" className="w-full">Bookings</Button>
                 </Link>
-                <Link to={`/manager/hotels/${hotel.id}/reports`}>
-                  <Button variant="secondary">Reports</Button>
+                <Link to={managerRoutes.reports(hotel.id)}>
+                  <Button variant="secondary" className="w-full">Reports</Button>
                 </Link>
-                <Link to={`/manager/hotels/${hotel.id}/edit`}>
-                  <Button variant="secondary">Edit</Button>
+                <Link to={managerRoutes.editHotel(hotel.id)}>
+                  <Button variant="secondary" className="w-full">Edit</Button>
                 </Link>
               </div>
             </div>

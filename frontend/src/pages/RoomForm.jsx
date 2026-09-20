@@ -5,6 +5,7 @@ import { createRoom, getRoomAdmin, updateRoom, readError } from '../lib/api'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import { Skeleton } from '../components/Skeleton'
+import { managerRoutes } from '../lib/managerRoutes'
 
 function emptyForm() {
   return {
@@ -99,7 +100,7 @@ export default function RoomForm() {
       } else {
         await createRoom(hotelId, payload)
       }
-      navigate(`/manager/hotels/${hotelId}/rooms`)
+      navigate(managerRoutes.rooms(hotelId))
     } catch (err) {
       setSaveError(readError(err, 'Could not save this room.'))
     } finally {
@@ -127,13 +128,13 @@ export default function RoomForm() {
   return (
     <div className="mx-auto max-w-[700px] px-4 py-6 sm:px-6 sm:py-10">
       <Link
-        to={`/manager/hotels/${hotelId}/rooms`}
+        to={managerRoutes.rooms(hotelId)}
         className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]"
       >
         ← Back to rooms
       </Link>
 
-      <h1 className="mt-4 text-2xl font-bold tracking-tight">
+      <h1 className="mt-4 text-xl font-bold tracking-tight sm:text-2xl">
         {editing ? 'Edit room' : 'New room'}
       </h1>
 
@@ -200,8 +201,8 @@ export default function RoomForm() {
 
         {saveError && <p className="text-[15px] text-[var(--danger)]">{saveError}</p>}
 
-        <div className="flex justify-end">
-          <Button type="submit" disabled={saving}>
+          <div className="flex justify-end">
+          <Button type="submit" disabled={saving} className="w-full sm:w-auto">
             {saving ? 'Saving…' : editing ? 'Save changes' : 'Create room'}
           </Button>
         </div>

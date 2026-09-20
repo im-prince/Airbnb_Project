@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { getHotelAdmin, getHotelBookings, readError } from '../lib/api'
 import { Skeleton } from '../components/Skeleton'
 import EmptyState from '../components/EmptyState'
+import { managerRoutes } from '../lib/managerRoutes'
 import { ClipboardList } from 'lucide-react'
 
 const rupees = new Intl.NumberFormat('en-IN', {
@@ -69,11 +70,11 @@ export default function HotelBookings() {
 
   return (
     <div className="mx-auto max-w-[900px] px-4 py-6 sm:px-6 sm:py-10">
-      <Link to="/manager" className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]">
+      <Link to={managerRoutes.dashboard} className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]">
         ← Back to your hotels
       </Link>
 
-      <h1 className="mt-4 text-2xl font-bold tracking-tight">
+      <h1 className="mt-4 text-xl font-bold tracking-tight sm:text-2xl">
         {hotel ? `${hotel.name} — Bookings` : 'Bookings'}
       </h1>
       <p className="mt-1 text-sm text-[var(--muted)]">

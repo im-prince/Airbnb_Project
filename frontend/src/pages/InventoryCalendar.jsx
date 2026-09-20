@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { getInventory, updateInventory, readError } from '../lib/api'
 import Input from '../components/Input'
 import Button from '../components/Button'
+import { managerRoutes } from '../lib/managerRoutes'
 import { Skeleton } from '../components/Skeleton'
 
 const rupees = new Intl.NumberFormat('en-IN', {
@@ -104,13 +105,13 @@ export default function InventoryCalendar() {
   return (
     <div className="mx-auto max-w-[900px] px-4 py-6 sm:px-6 sm:py-10">
       <Link
-        to={`/manager/hotels/${hotelId}/rooms`}
+        to={managerRoutes.rooms(hotelId)}
         className="text-sm text-[var(--muted)] no-underline hover:text-[var(--ink)]"
       >
         ← Back to rooms
       </Link>
 
-      <h1 className="mt-4 text-2xl font-bold tracking-tight">Pricing & availability</h1>
+      <h1 className="mt-4 text-xl font-bold tracking-tight sm:text-2xl">Pricing & availability</h1>
       <p className="mt-1 text-sm text-[var(--muted)]">
         Update surge pricing or close a date range across this room type.
       </p>
@@ -166,8 +167,8 @@ export default function InventoryCalendar() {
           <p className="mt-3 text-[15px] text-[var(--brand)]">Updated.</p>
         )}
 
-        <div className="mt-4 flex justify-end">
-          <Button type="submit" disabled={saving}>
+          <div className="mt-4 flex justify-end">
+          <Button type="submit" disabled={saving} className="w-full sm:w-auto">
             {saving ? 'Updating…' : 'Apply to range'}
           </Button>
         </div>
